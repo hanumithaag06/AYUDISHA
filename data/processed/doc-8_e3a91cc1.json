@@ -1,0 +1,20 @@
+{
+  "title": "Drugs and Cosmetics Rules, 1945 - Rule 154 Form 25-D & Schedule T",
+  "document_type": "REGULATION",
+  "jurisdiction": "India",
+  "access_type": "PUBLIC",
+  "publication_date": "1945-12-21",
+  "effective_date": "2023-10-01",
+  "version": "v2023_amended",
+  "url": "https://www.ayush.gov.in/ayush-regulatory-framework.html",
+  "sections": [
+    {
+      "section": "Form 25-D Manufacturing License",
+      "content": "License to manufacture for sale of Ayurvedic (including Siddha or Unani) drugs granted by State Licensing Authorities after verifying Schedule T GMP compliance, raw material botanical identification, and heavy metal quality control."
+    },
+    {
+      "section": "Rule 158-B Efficacy Proof for Patent/Proprietary Ayurvedic Medicines",
+      "content": "For Patent or Proprietary Ayurvedic Medicines (new combinations/extracts), applicants must submit safety studies, published authoritative textual citations, or pilot clinical trial data demonstrating therapeutic rationale."
+    }
+  ]
+}

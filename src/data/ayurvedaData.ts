@@ -1,0 +1,377 @@
+export interface HerbData {
+  name: string;
+  sanskritName: string;
+  botanicalName: string;
+  category: string;
+  traditionalUse: string;
+  conservationStatus: 'Common' | 'Threatened' | 'Endangered' | 'Critically Endangered';
+  tkdlReference: string;
+  nbaRisk: 'Low' | 'Medium' | 'High';
+}
+
+export interface RegulatoryCitation {
+  id: string;
+  title: string;
+  source: string;
+  section: string;
+  summary: string;
+  fullExcerpt: string;
+  link: string;
+}
+
+export const HERB_DATABASE: Record<string, HerbData> = {
+  turmeric: {
+    name: "Turmeric",
+    sanskritName: "Haridra",
+    botanicalName: "Curcuma longa",
+    category: "Anti-inflammatory, Wound healing",
+    traditionalUse: "Used traditionally for inflammation, skin disorders, and wound healing.",
+    conservationStatus: "Common",
+    tkdlReference: "TKDL/AY/1084 - Traditional use for wound healing documented in Charaka Samhita.",
+    nbaRisk: "Low"
+  },
+  neem: {
+    name: "Neem",
+    sanskritName: "Nimba",
+    botanicalName: "Azadirachta indica",
+    category: "Antimicrobial, Skin care",
+    traditionalUse: "Used traditionally for skin diseases, insecticidal properties, and blood purification.",
+    conservationStatus: "Common",
+    tkdlReference: "TKDL/AY/2043 - Documented in Sushruta Samhita for skin diseases.",
+    nbaRisk: "Low"
+  },
+  ashwagandha: {
+    name: "Ashwagandha",
+    sanskritName: "Ashwagandha",
+    botanicalName: "Withania somnifera",
+    category: "Adaptogen, Rejuvenator (Rasayana)",
+    traditionalUse: "Used for stress, fatigue, muscle strength, and immune support.",
+    conservationStatus: "Common",
+    tkdlReference: "TKDL/AY/1502 - Documented in Ashtanga Hridaya as a vitalizing tonic.",
+    nbaRisk: "Low"
+  },
+  sarpagandha: {
+    name: "Sarpagandha",
+    sanskritName: "Sarpagandha",
+    botanicalName: "Rauvolfia serpentina",
+    category: "Antihypertensive, Sedative",
+    traditionalUse: "Used for high blood pressure, insomnia, and mental agitation.",
+    conservationStatus: "Threatened",
+    tkdlReference: "TKDL/AY/3029 - Documented in Charaka Samhita for insomnia and mental illness.",
+    nbaRisk: "High"
+  },
+  jatamansi: {
+    name: "Jatamansi",
+    sanskritName: "Jatamansi",
+    botanicalName: "Nardostachys jatamansi",
+    category: "Neuroprotective, Sedative",
+    traditionalUse: "Used for cognitive health, stress, anxiety, and hair growth.",
+    conservationStatus: "Critically Endangered",
+    tkdlReference: "TKDL/AY/4002 - Documented in Sushruta Samhita as a cooling and calming herb.",
+    nbaRisk: "High"
+  },
+  guggulu: {
+    name: "Guggulu",
+    sanskritName: "Guggulu",
+    botanicalName: "Commiphora wightii",
+    category: "Anti-inflammatory, Anti-lipidemic",
+    traditionalUse: "Used for joint disorders (Amavata) and weight management (Medoroga).",
+    conservationStatus: "Threatened",
+    tkdlReference: "TKDL/AY/1255 - Documented in Sushruta Samhita for clearing channels and joint pain.",
+    nbaRisk: "High"
+  },
+  tulsi: {
+    name: "Tulsi",
+    sanskritName: "Tulasi",
+    botanicalName: "Ocimum sanctum",
+    category: "Immunomodulator, Respiratory",
+    traditionalUse: "Used for cough, colds, fever, and immune response enhancement.",
+    conservationStatus: "Common",
+    tkdlReference: "TKDL/AY/1119 - Documented in Charaka Samhita for respiratory ailments.",
+    nbaRisk: "Low"
+  },
+  amla: {
+    name: "Amla",
+    sanskritName: "Amalaki",
+    botanicalName: "Phyllanthus emblica",
+    category: "Antioxidant, Digestive",
+    traditionalUse: "Used for rejuvenation, acidity, hair growth, and digestive health.",
+    conservationStatus: "Common",
+    tkdlReference: "TKDL/AY/1004 - Documented in Charaka Samhita as the premier Rasayana.",
+    nbaRisk: "Low"
+  },
+  guduchi: {
+    name: "Guduchi",
+    sanskritName: "Guduchi / Gila",
+    botanicalName: "Tinospora cordifolia",
+    category: "Immunomodulator, Antipyretic",
+    traditionalUse: "Used for chronic fevers, immune enhancement, and metabolic control.",
+    conservationStatus: "Common",
+    tkdlReference: "TKDL/AY/1429 - Documented in Bhavaprakasha Nighantu for immunity.",
+    nbaRisk: "Low"
+  }
+};
+
+export const REGULATORY_CITATIONS: RegulatoryCitation[] = [
+  {
+    id: "sec-3p",
+    title: "Section 3(p) - Traditional Knowledge Exclusion",
+    source: "Indian Patents Act, 1970",
+    section: "Section 3(p)",
+    summary: "Prevents patenting of inventions that are, in effect, traditional knowledge or mere aggregations of known traditional properties.",
+    fullExcerpt: "An invention which, in effect, is traditional knowledge or which is an aggregation or duplication of known properties of traditionally known component or components is not an invention within the meaning of this Act.",
+    link: "https://ipindia.gov.in/patents-act-1970.htm"
+  },
+  {
+    id: "sec-3e",
+    title: "Section 3(e) - Mere Admixture Exclusion",
+    source: "Indian Patents Act, 1970",
+    section: "Section 3(e)",
+    summary: "Prevents patenting of mixtures unless a synergistic therapeutic effect is scientifically demonstrated.",
+    fullExcerpt: "A substance obtained by a mere admixture resulting only in the aggregation of the properties of the components thereof or a process for producing such substance is not patentable.",
+    link: "https://ipindia.gov.in/patents-act-1970.htm"
+  },
+  {
+    id: "sec-3d",
+    title: "Section 3(d) - Enhanced Efficacy Requirement",
+    source: "Indian Patents Act, 1970",
+    section: "Section 3(d)",
+    summary: "Requires proof of significantly enhanced therapeutic efficacy for new forms or uses of known substances.",
+    fullExcerpt: "The mere discovery of a new form of a known substance which does not result in the enhancement of the known efficacy of that substance or the mere discovery of any new property or new use for a known substance... is not patentable.",
+    link: "https://ipindia.gov.in/patents-act-1970.htm"
+  },
+  {
+    id: "nba-sec-6",
+    title: "Section 6 - Biological Diversity Act Compliance",
+    source: "Biological Diversity Act, 2002",
+    section: "Section 6",
+    summary: "Requires approval from the National Biodiversity Authority (NBA) before applying for intellectual property rights based on Indian biological resources.",
+    fullExcerpt: "No person shall apply for any intellectual property right, by whatever name called, in or outside India for any invention based on any research or information on a biological resource obtained from India without obtaining the previous approval of the National Biodiversity Authority.",
+    link: "http://nbaindia.org/"
+  },
+  {
+    id: "ayush-form-25d",
+    title: "Form 25-D - License to Manufacture Ayurvedic Drugs",
+    source: "Drugs and Cosmetics Rules, 1945",
+    section: "Rule 154 / Form 25-D",
+    summary: "License required for manufacturing Ayurvedic, Siddha or Unani drugs for commercial sale.",
+    fullExcerpt: "Form 25-D is issued by state licensing authorities for the manufacture of Ayurvedic, Siddha or Unani drugs under the Drugs and Cosmetics Act, subject to strict adherence to Good Manufacturing Practices (GMP) outlined in Schedule T.",
+    link: "https://ayush.gov.in/"
+  },
+  {
+    id: "ayush-schedule-t",
+    title: "Schedule T - Good Manufacturing Practices (GMP)",
+    source: "Drugs and Cosmetics Rules, 1945",
+    section: "Schedule T",
+    summary: "Defines the standards of hygienic conditions, raw material storage, quality control lab, and equipment required for Ayurvedic drug manufacturing.",
+    fullExcerpt: "The factory premises shall comply with the requirements of Schedule T to ensure quality control, stability of products, authentic identification of botanical raw materials, and clean formulation environments.",
+    link: "https://ayush.gov.in/"
+  },
+  {
+    id: "schedule-j-claims",
+    title: "Schedule J - Prohibited Diseases & Ailments",
+    source: "Drugs and Cosmetics Rules, 1945",
+    section: "Schedule J",
+    summary: "Lists diseases and ailments that a drug cannot claim to prevent or cure. Claims to cure diabetes, cancer, blindness, etc., are strictly prohibited.",
+    fullExcerpt: "No drug may claim to prevent or cure diseases or ailments specified in Schedule J (e.g., Cancer, Diabetes, AIDS, Blindness, Genetic disorders). Marketing materials violating this face immediate product ban and prosecution.",
+    link: "https://cdsco.gov.in/"
+  }
+];
+
+export const TRANSLATIONS = {
+  en: {
+    title: "AyurIP Compliance Suite",
+    subtitle: "Ayurveda IP Protection & Regulatory Roadmap Assistant",
+    tabRoadmap: "Formulation Roadmap",
+    tabScanner: "IP Risk Scanner",
+    tabAssistant: "Source-Verified Chat",
+    tabChecklist: "Compliance Checklist",
+    tabEscalation: "Expert Escalation",
+    formulationName: "Formulation/Product Name",
+    ingredients: "Select Ingredients",
+    addIngredient: "Add Selected Herb",
+    noveltyTitle: "Inventive Step & Scientific Novelty",
+    noveltyDesc: "Describe how your formulation improves on traditional knowledge (e.g., synergy details, advanced extraction method, enhanced bioavailability).",
+    calculateRisk: "Scan Formulation Risks",
+    scanning: "Scanning...",
+    riskHigh: "High Compliance Risk",
+    riskMedium: "Moderate Compliance Risk",
+    riskLow: "Low Compliance Risk",
+    escalateBtn: "Request Expert Legal Consult",
+    checklistTitle: "Personalized Compliance Checklist",
+    downloadChecklist: "Print / Save PDF Checklist",
+    chatPlaceholder: "Ask about AYUSH guidelines, Section 3(p), or trademarking...",
+    voiceStart: "Start Voice",
+    voiceStop: "Stop Voice",
+    speakResponse: "Read Aloud",
+    sourceVerified: "Source Verified",
+    citations: "Regulatory Citations",
+    language: "Language",
+    classicalRef: "Is this based on a Classical Text? (e.g. Charaka Samhita)",
+    yes: "Yes",
+    no: "No",
+    classicalTextName: "Classical Formulation Name",
+    expertEscalationHeader: "Escalate to Ayurveda IP Attorney",
+    expertFormName: "Full Name",
+    expertFormEmail: "Email Address",
+    expertFormDetails: "Case Notes / Formulation Details",
+    expertFormSubmit: "Submit Case File",
+    expertFormSuccess: "Case successfully prepared! Our partner IP attorneys will reach out to you within 48 hours."
+  },
+  hi: {
+    title: "आयुर्-आईपि अनुपालन सूट",
+    subtitle: "आयुर्वेद बौद्धिक संपदा संरक्षण एवं नियामक रोडमैप सहायक",
+    tabRoadmap: "फॉर्मूलेशन रोडमैप",
+    tabScanner: "बौद्धिक संपदा जोखिम स्कैनर",
+    tabAssistant: "सत्यापित चैट",
+    tabChecklist: "अनुपालन चेकलिस्ट",
+    tabEscalation: "विशेषज्ञ परामर्श",
+    formulationName: "फॉर्मूलेशन/उत्पाद का नाम",
+    ingredients: "सामग्री का चयन करें",
+    addIngredient: "चयनित जड़ी बूटी जोड़ें",
+    noveltyTitle: "अभिनव कदम और वैज्ञानिक नवीनता",
+    noveltyDesc: "वर्णन करें कि आपका फॉर्मूलेशन पारंपरिक ज्ञान को कैसे बेहतर बनाता है (जैसे, तालमेल विवरण, उन्नत निष्कर्षण विधि)।",
+    calculateRisk: "फॉर्मूलेशन जोखिमों को स्कैन करें",
+    scanning: "स्कैनिंग जारी है...",
+    riskHigh: "उच्च अनुपालन जोखिम",
+    riskMedium: "मध्यम अनुपालन जोखिम",
+    riskLow: "कम अनुपालन जोखिम",
+    escalateBtn: "विशेषज्ञ कानूनी सलाह का अनुरोध करें",
+    checklistTitle: "व्यक्तिगत अनुपालन चेकलिस्ट",
+    downloadChecklist: "चेकलिस्ट प्रिंट / पीडीएफ सेव करें",
+    chatPlaceholder: "आयुष दिशानिर्देशों, धारा 3 (पी), या ट्रेडमार्क के बारे में पूछें...",
+    voiceStart: "आवाज शुरू करें",
+    voiceStop: "आवाज बंद करें",
+    speakResponse: "ज़ोर से पढ़ें",
+    sourceVerified: "स्रोत सत्यापित",
+    citations: "नियामक उद्धरण",
+    language: "भाषा",
+    classicalRef: "क्या यह शास्त्रीय पाठ (जैसे चरक संहिता) पर आधारित है?",
+    yes: "हाँ",
+    no: "नहीं",
+    classicalTextName: "शास्त्रीय फॉर्मूलेशन नाम",
+    expertEscalationHeader: "आयुर्वेद आईपी अटॉर्नी से संपर्क करें",
+    expertFormName: "पूरा नाम",
+    expertFormEmail: "ईमेल पता",
+    expertFormDetails: "केस नोट्स / फॉर्मूलेशन विवरण",
+    expertFormSubmit: "केस फ़ाइल सबमिट करें",
+    expertFormSuccess: "केस सफलतापूर्वक तैयार! हमारे सहयोगी आईपी वकील 48 घंटों में आपसे संपर्क करेंगे।"
+  },
+  ta: {
+    title: "ஆயுர்-ஐபி இணக்கத் தொகுப்பு",
+    subtitle: "ஆயுர்வேத அறிவுசார் சொத்துரிமை & ஒழுங்குமுறை வழிகாட்டி",
+    tabRoadmap: "தயாரிப்பு வழிமுறை",
+    tabScanner: "ஐபி அபாய ஸ்கேனர்",
+    tabAssistant: "சான்றளிக்கப்பட்ட அரட்டை",
+    tabChecklist: "இணக்க சரிபார்ப்புப் பட்டியல்",
+    tabEscalation: "வல்லுநர் ஆலோசனை",
+    formulationName: "தயாரிப்பு / பார்முலேஷன் பெயர்",
+    ingredients: "மூலிகைகளைத் தேர்ந்தெடு",
+    addIngredient: "தேர்ந்தெடுத்த மூலிகையைச் சேர்",
+    noveltyTitle: "புதிய அறிவியல் கண்டுபிடிப்பு",
+    noveltyDesc: "பாரம்பரிய அறிவிலிருந்து உங்கள் தயாரிப்பு எவ்வாறு வேறுபடுகிறது என்பதை விளக்குங்கள் (எ.கா. கூட்டு விளைவு, மேம்பட்ட சாறு முறை).",
+    calculateRisk: "அபாயங்களை ஸ்கேன் செய்",
+    scanning: "ஸ்கேன் செய்கிறது...",
+    riskHigh: "அதிக இணக்க அபாயம்",
+    riskMedium: "நடுத்தர இணக்க அபாயம்",
+    riskLow: "குறைந்த இணக்க அபாயம்",
+    escalateBtn: "வல்லுநர் சட்ட ஆலோசனை பெறுக",
+    checklistTitle: "தனிப்பயனாக்கப்பட்ட சரிபார்ப்புப் பட்டியல்",
+    downloadChecklist: "அச்சிடுக / பிடிஎப் ஆக சேமிக்கவும்",
+    chatPlaceholder: "ஆயுஷ் வழிகாட்டுதல்கள், பிரிவு 3(பி) அல்லது வர்த்தக முத்திரை பற்றி கேளுங்கள்...",
+    voiceStart: "குரல் தொடங்கு",
+    voiceStop: "குரல் நிறுத்து",
+    speakResponse: "உரக்க வாசி",
+    sourceVerified: "மூலம் சரிபார்க்கப்பட்டது",
+    citations: "ஒழுங்குமுறை சான்றுகள்",
+    language: "மொழி",
+    classicalRef: "இது பாரம்பரிய நூலை அடிப்படையாகக் கொண்டதா? (எ.கா. சரக சம்ஹிதை)",
+    yes: "ஆம்",
+    no: "இல்லை",
+    classicalTextName: "பாரம்பரிய தயாரிப்பு பெயர்",
+    expertEscalationHeader: "ஆயுர்வேத ஐபி வழக்கறிஞரை அணுகவும்",
+    expertFormName: "முழு பெயர்",
+    expertFormEmail: "மின்னஞ்சல் முகவரி",
+    expertFormDetails: "வழக்கு குறிப்புகள் / தயாரிப்பு விவரங்கள்",
+    expertFormSubmit: "வழக்கு கோப்பைச் சமர்ப்பி",
+    expertFormSuccess: "வழக்கு வெற்றிகரமாகத் தயாராக உள்ளது! எங்கள் வழக்கறிஞர்கள் 48 மணிநேரத்திற்குள் உங்களைத் தொடர்புகொள்வார்கள்."
+  },
+  te: {
+    title: "ఆయుర్-ఐపీ సమ్మతి సూట్",
+    subtitle: "ఆయుర్వేద మేధో సంపత్తి రక్షణ & నియంత్రణ రోడ్‌మ్యాప్ అసిస్టెంట్",
+    tabRoadmap: "ఫార్ములేషన్ రోడ్‌మ్యాప్",
+    tabScanner: "ఐపీ రిస్క్ స్కానర్",
+    tabAssistant: "ధృవీకరించబడిన చాట్",
+    tabChecklist: "సమ్మతి చెక్‌లిస్ట్",
+    tabEscalation: "నిపుణుల సంప్రదింపులు",
+    formulationName: "ఫార్ములేషన్/ఉత్పత్తి పేరు",
+    ingredients: "పదార్థాలను ఎంచుకోండి",
+    addIngredient: "ఎంచుకున్న మూలికను జోడించు",
+    noveltyTitle: "శాస్త్రీయ ఆవిష్కరణ & నవ్యత",
+    noveltyDesc: "మీ ఫార్ములేషన్ సాంప్రదాయ జ్ఞానాన్ని ఎలా మెరుగుపరుస్తుందో వివరించండి (ఉదా. సినర్జీ వివరాలు, అధునాతన సంగ్రహణ పద్ధతి).",
+    calculateRisk: "ఫార్ములేషన్ రిస్క్‌లను స్కాన్ చేయండి",
+    scanning: "స్కాన్ చేస్తోంది...",
+    riskHigh: "అధిక సమ్మతి రిస్క్",
+    riskMedium: "మధ్యస్థ సమ్మతి రిస్క్",
+    riskLow: "తక్కువ సమ్మతి రిస్క్",
+    escalateBtn: "నిపుణుల న్యాయ సంప్రదింపులను అభ్యర్థించండి",
+    checklistTitle: "వ్యక్తిగతీకరించిన సమ్మతి చెక్‌లిస్ట్",
+    downloadChecklist: "చెక్‌లిస్ట్ ప్రింట్ / పిడిఎఫ్ సేవ్ చేయండి",
+    chatPlaceholder: "ఆయుష్ మార్గదర్శకాలు, సెక్షన్ 3(పి) లేదా ట్రేడ్‌మార్క్ గురించి అడగండి...",
+    voiceStart: "వాయిస్ ప్రారంభించు",
+    voiceStop: "వాయిస్ ఆపు",
+    speakResponse: "గట్టిగా చదవండి",
+    sourceVerified: "మూలం ధృవీకరించబడింది",
+    citations: "నియంత్రణ ఉల్లేఖనాలు",
+    language: "భాష",
+    classicalRef: "ఇది క్లాసికల్ టెక్స్ట్ ఆధారంగా రూపొందించబడిందా? (ఉదా. చరక సంహిత)",
+    yes: "అవును",
+    no: "కాదు",
+    classicalTextName: "క్లాసికల్ ఫార్ములేషన్ పేరు",
+    expertEscalationHeader: "ఆయుర్వేద ఐపీ న్యాయవాదిని సంప్రదించండి",
+    expertFormName: "పూర్తి పేరు",
+    expertFormEmail: "ఈమెయిల్ చిరునామా",
+    expertFormDetails: "కేస్ నోట్స్ / ఫార్ములేషన్ వివరాలు",
+    expertFormSubmit: "కేస్ ఫైల్‌ను సమర్పించండి",
+    expertFormSuccess: "కేస్ విజయవంతంగా సిద్ధమైంది! మా భాగస్వామ్య ఐపీ లాయర్లు 48 గంటల్లో మిమ్మల్ని సంప్రదిస్తారు."
+  },
+  sa: {
+    title: "आयुर्-आईपि अनुपालन व्यवस्था",
+    subtitle: "आयुर्वेद बौद्धिकसम्पत्तिकल्याणं तथा च नियामक मार्गदर्शकः",
+    tabRoadmap: "मिश्रण मार्गचित्रम्",
+    tabScanner: "आईपि दोष अन्वेषकः",
+    tabAssistant: "प्रमाणित वार्तालापः",
+    tabChecklist: "अनुपालन पञ्जिका",
+    tabEscalation: "तज्ज्ञ परामर्शः",
+    formulationName: "औषधस्य / मिश्रणस्य नाम",
+    ingredients: "द्रव्याणि चिनोतु",
+    addIngredient: "चितं द्रव्यं योजयतु",
+    noveltyTitle: "वैज्ञानिक नवीनीकरणम्",
+    noveltyDesc: "कथं भवताम् निर्माणम् प्राचीनज्ञानात् श्रेष्ठं वर्तते इति वर्णयन्तु (यथा मिश्रणविशेषः वा शोधनविधिः)।",
+    calculateRisk: "निर्माणस्य दोषान् अन्वेषयतु",
+    scanning: "अन्वेषणं प्रचलति...",
+    riskHigh: "अति सङ्कटपूर्णम्",
+    riskMedium: "मध्यम सङ्कटपूर्णम्",
+    riskLow: "अल्प सङ्कटपूर्णम्",
+    escalateBtn: "धर्माधिकारिणा सह सम्भाषणम्",
+    checklistTitle: "व्यक्तिगता अनुपालन सूचिका",
+    downloadChecklist: "मुद्रणं / सञ्चिकारूपेण रक्षणम्",
+    chatPlaceholder: "आयुष-नियमसंहितायाः वा ३(p) धारायाः विषये पृच्छन्तु...",
+    voiceStart: "भाषणं आरभ्यताम्",
+    voiceStop: "भाषणं स्थग्यताम्",
+    speakResponse: "उच्चैः पठतु",
+    sourceVerified: "प्रमाणितं मूलम्",
+    citations: "नियामक उद्धरणाः",
+    language: "भाषा",
+    classicalRef: "किम् एतत् प्राचीनग्रन्थाधारितम्? (यथा चरकसंहिता)",
+    yes: "आम्",
+    no: "न",
+    classicalTextName: "प्राचीन औषधस्य नाम",
+    expertEscalationHeader: "आयुर्वेद बौद्धिकसम्पत्ति विधिज्ञं प्रविशन्तु",
+    expertFormName: "पूर्णं नाम",
+    expertFormEmail: "विद्युत्पत्रम् (Email)",
+    expertFormDetails: "औषधस्य संक्षिप्त विवरणम्",
+    expertFormSubmit: "विवरणं प्रेषयतु",
+    expertFormSuccess: "विवरणं प्रेषितम्! अस्माकं विधिज्ञाः अष्टचत्वारिंशत् होरासु भवद्भिः सह सम्पर्कं करिष्यन्ति।"
+  }
+};

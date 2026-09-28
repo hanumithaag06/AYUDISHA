@@ -1,0 +1,20 @@
+{
+  "title": "IP India Guidelines for Processing Patent Applications Relating to Traditional Knowledge and Biological Material",
+  "document_type": "IPR_GUIDELINE",
+  "jurisdiction": "India",
+  "access_type": "PUBLIC",
+  "publication_date": "2012-12-18",
+  "effective_date": "2012-12-18",
+  "version": "v1.2",
+  "url": "https://www.ipindia.gov.in/writereaddata/Portal/IPOGuidelinesManuals/1_38_1_4-traditional-knowledge-guidelines.pdf",
+  "sections": [
+    {
+      "section": "Guideline 4 - Synergistic Efficacy Requirements",
+      "content": "Applicants claiming combination herbal or Ayurvedic formulations must present quantitative Chou-Talalay Combination Index (CI) data or comparative animal model assays demonstrating that the combined action exceeds the sum of individual components."
+    },
+    {
+      "section": "Guideline 7 - Disclosure of Biological Source",
+      "content": "Every patent specification filing involving Indian flora or herbal extract must explicitly disclose the source and geographical origin of the biological material in Form 1 and complete NBA approval compliance."
+    }
+  ]
+}

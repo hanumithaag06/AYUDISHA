@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+  # 1. Frontend Web Client
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - ayur_network
+
+  # 2. FastAPI Backend & RAG Engine
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://ayur_user:ayur_pass@postgres:5432/ayur_db
+      - QDRANT_URL=http://qdrant:6333
+      - OLLAMA_BASE_URL=http://ollama:11434
+    depends_on:
+      - postgres
+      - qdrant
+    restart: unless-stopped
+    networks:
+      - ayur_network
+
+  # 3. PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ayur_user
+      POSTGRES_PASSWORD: ayur_pass
+      POSTGRES_DB: ayur_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - ayur_network
+
+  # 4. Qdrant Vector Database
+  qdrant:
+    image: qdrant/qdrant:v1.13.2
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant_storage:/qdrant/storage
+    restart: unless-stopped
+    networks:
+      - ayur_network
+
+  # 5. Local Ollama LLM Container (qwen2.5 / llama3.1)
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_models:/root/.ollama
+    restart: unless-stopped
+    networks:
+      - ayur_network
+
+volumes:
+  postgres_data:
+  qdrant_storage:
+  ollama_models:
+
+networks:
+  ayur_network:
+    driver: bridge

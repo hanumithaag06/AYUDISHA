@@ -1,0 +1,16 @@
+{
+  "title": "WIPO PCT & US/EU Botanical Drug Regulatory Comparison Framework",
+  "document_type": "INTERNATIONAL_GUIDELINE",
+  "jurisdiction": "International",
+  "access_type": "PUBLIC",
+  "publication_date": "2022-09-10",
+  "effective_date": "2022-09-10",
+  "version": "v2022",
+  "url": "https://www.wipo.int/pct/en/",
+  "sections": [
+    {
+      "section": "US FDA Botanical Drug Development vs EU Herbal Medicinal Products Directive",
+      "content": "In the United States, Ayurvedic complex mixtures are regulated as Botanical Drugs (NDA pathway requiring batch-to-batch chemical fingerprinting) or Dietary Supplements (DSHEA 1994). In the European Union, traditional herbal products follow the Traditional Herbal Medicinal Products Directive (THMPD 2004/24/EC) requiring 30 years of traditional use (15 years within EU)."
+    }
+  ]
+}
