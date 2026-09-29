@@ -22,6 +22,9 @@ ENV/
 .env
 *.db
 *.sqlite3
+data/
+backend/data/
+
 
 # Editor directories and files
 .vscode/*

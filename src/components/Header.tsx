@@ -1,5 +1,8 @@
-import React from 'react';
-import { Shield, Sparkles, Globe, BookOpen, Scale, Layers, History, FileText, Activity, Cpu, Fingerprint, ShieldAlert, Compass, Sliders, BarChart2, GitBranch, Share2 } from 'lucide-react';
+import React, { useState } from 'react';
+import { 
+  Shield, Globe, HelpCircle, Check, X, Compass, BookOpen, Layers, Cpu, ChevronDown
+} from 'lucide-react';
+import { t } from '../utils/translations';
 
 interface HeaderProps {
   activeTab: string;
@@ -8,6 +11,7 @@ interface HeaderProps {
   setJurisdiction: (j: string) => void;
   language: string;
   setLanguage: (l: string) => void;
+  completedStages?: string[];
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -16,129 +20,251 @@ export const Header: React.FC<HeaderProps> = ({
   jurisdiction,
   setJurisdiction,
   language,
-  setLanguage
+  setLanguage,
+  completedStages = []
 }) => {
+  const [showHelpModal, setShowHelpModal] = useState(false);
+  const [showToolsDropdown, setShowToolsDropdown] = useState(false);
+
   const languages = [
     { code: 'en', label: 'English' },
     { code: 'hi', label: 'हिंदी (Hindi)' },
     { code: 'ta', label: 'தமிழ் (Tamil)' },
     { code: 'te', label: 'తెలుగు (Telugu)' },
     { code: 'ml', label: 'മലയാളം (Malayalam)' },
-    { code: 'kn', label: 'கன்னட (Kannada)' },
+    { code: 'kn', label: 'ಕನ್ನಡ (Kannada)' },
     { code: 'bn', label: 'বাংলা (Bengali)' },
     { code: 'mr', label: 'मराठी (Marathi)' },
     { code: 'gu', label: 'ગુજરાતી (Gujarati)' },
     { code: 'sa', label: 'संस्कृतम् (Sanskrit)' },
   ];
 
-  const navItems = [
-    { id: 'chat', label: 'Research RAG', icon: Sparkles },
-    { id: 'fingerprint', label: 'Formulation Fingerprint', icon: Fingerprint },
-    { id: 'ipr-path', label: 'IPR Path Map', icon: Scale },
-    { id: 'radar', label: 'IPR Conflict Radar', icon: ShieldAlert },
-    { id: 'prior-art', label: 'Prior-Art Explorer', icon: Compass },
-    { id: 'simulator', label: 'Regulatory Simulator', icon: Sliders },
-    { id: 'tk-lens', label: 'TK Lens', icon: BookOpen },
-    { id: 'timeline', label: 'Timeline & Diff', icon: History },
-    { id: 'compare', label: 'Jurisdiction Compare', icon: Layers },
-    { id: 'classifier', label: 'Product Classifier', icon: Cpu },
-    { id: 'uncertainty', label: 'Uncertainty Map', icon: BarChart2 },
-    { id: 'contradictions', label: 'Contradiction Detector', icon: GitBranch },
-    { id: 'gaps', label: 'Research Gaps', icon: ShieldAlert },
-    { id: 'graph', label: 'Knowledge Graph', icon: Share2 },
-    { id: 'sources', label: 'Source Registry', icon: FileText },
-    { id: 'workspace', label: 'Workspace & Export', icon: Shield },
-    { id: 'admin', label: 'Admin Telemetry', icon: Activity },
+  // 6 Primary Guided Workflow Stages with multilingual translations
+  const primaryStages = [
+    { id: 'research', num: 1, labelKey: 'stage1' },
+    { id: 'analyze', num: 2, labelKey: 'stage2' },
+    { id: 'ipr-tk', num: 3, labelKey: 'stage3' },
+    { id: 'regulation', num: 4, labelKey: 'stage4' },
+    { id: 'verify', num: 5, labelKey: 'stage5' },
+    { id: 'dossier', num: 6, labelKey: 'stage6' },
   ];
 
+  const stageOrder = ['research', 'analyze', 'ipr-tk', 'regulation', 'verify', 'dossier'];
+  const currentIndex = stageOrder.indexOf(activeTab);
+
+  const getStageState = (stageId: string, index: number) => {
+    if (activeTab === stageId) return 'current';
+    if (completedStages.includes(stageId) || (currentIndex !== -1 && index < currentIndex)) return 'completed';
+    return 'future';
+  };
+
   return (
-    <header className="sticky top-0 z-50 bg-slate-950/90 backdrop-blur-md border-b border-emerald-950/60 text-slate-100">
-      {/* Top Banner */}
-      <div className="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
-        {/* Logo & Tagline */}
-        <div className="flex items-center space-x-3 cursor-pointer" onClick={() => setActiveTab('chat')}>
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 via-teal-500 to-amber-400 p-0.5 shadow-lg shadow-emerald-950/50">
-            <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
-              <Shield className="w-5 h-5 text-emerald-400" />
+    <>
+      <header className="sticky top-0 z-40 bg-slate-950/95 backdrop-blur-md border-b border-slate-900 text-slate-100 shadow-xl">
+        {/* Top Bar with Brand, Scope, Lang, Top Utilities, Help, Profile */}
+        <div className="max-w-7xl mx-auto px-4 py-2.5 flex items-center justify-between gap-3 border-b border-slate-900/80">
+          {/* Logo & Tagline */}
+          <div className="flex items-center space-x-3 cursor-pointer" onClick={() => setActiveTab('research')}>
+            <div className="w-8 h-8 rounded-lg bg-emerald-950 border border-emerald-500/40 flex items-center justify-center shadow-md">
+              <Shield className="w-4 h-4 text-emerald-400" />
             </div>
-          </div>
-          <div>
             <div className="flex items-center space-x-2">
-              <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-emerald-400 via-teal-200 to-amber-300 bg-clip-text text-transparent">
-                AYUDISHA
+              <span className="text-lg font-bold tracking-tight text-slate-100">
+                {t('appTitle', language)}
               </span>
-              <span className="text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full bg-emerald-950/80 border border-emerald-500/30 text-emerald-300 font-semibold">
-                Living Intelligence System
+              <span className="hidden sm:inline-block text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-slate-400 font-semibold">
+                {t('guidedWorkspace', language)}
               </span>
             </div>
-            <p className="text-xs text-slate-400 font-medium">
-              Where Ayurveda Meets IPR & Regulation
-            </p>
           </div>
-        </div>
 
-        {/* Global Controls: Jurisdiction & Language */}
-        <div className="flex items-center space-x-3">
-          {/* Jurisdiction Selector */}
-          <div className="flex items-center bg-slate-900/90 border border-slate-800 rounded-lg p-1 text-xs">
-            <Globe className="w-3.5 h-3.5 text-slate-400 ml-1.5 mr-1" />
-            <span className="text-slate-400 mr-1.5 font-medium">Scope:</span>
-            {['India', 'International', 'Both'].map((j) => (
+          {/* Center/Right Top Nav Controls & Tools (Moved from footer to top) */}
+          <div className="flex items-center space-x-2.5 text-xs">
+            {/* Top Navigation Utilities Links */}
+            <div className="hidden lg:flex items-center space-x-1.5 border-r border-slate-800 pr-3 mr-1">
               <button
-                key={j}
-                onClick={() => setJurisdiction(j)}
-                className={`px-2.5 py-1 rounded-md transition-all font-medium cursor-pointer ${
-                  jurisdiction === j
-                    ? 'bg-emerald-600 text-white shadow-sm'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                onClick={() => setActiveTab('sources')}
+                className={`px-2.5 py-1 rounded-lg transition font-medium cursor-pointer flex items-center space-x-1 ${
+                  activeTab === 'sources' ? 'bg-emerald-950 text-emerald-300 border border-emerald-500/30' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
                 }`}
               >
-                {j}
+                <BookOpen className="w-3.5 h-3.5 text-emerald-400" />
+                <span>{t('sourceRegistry', language)}</span>
               </button>
-            ))}
-          </div>
 
-          {/* Language Selector */}
-          <div className="flex items-center bg-slate-900/90 border border-slate-800 rounded-lg px-2 py-1 text-xs">
-            <span className="text-slate-400 mr-1 font-medium">Lang:</span>
-            <select
-              value={language}
-              onChange={(e) => setLanguage(e.target.value)}
-              className="bg-transparent text-emerald-300 font-medium focus:outline-none cursor-pointer"
+              <button
+                onClick={() => setActiveTab('graph')}
+                className={`px-2.5 py-1 rounded-lg transition font-medium cursor-pointer flex items-center space-x-1 ${
+                  activeTab === 'graph' ? 'bg-emerald-950 text-emerald-300 border border-emerald-500/30' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
+                }`}
+              >
+                <Compass className="w-3.5 h-3.5 text-emerald-400" />
+                <span>{t('knowledgeGraph', language)}</span>
+              </button>
+
+              <button
+                onClick={() => setActiveTab('admin')}
+                className={`px-2.5 py-1 rounded-lg transition font-medium cursor-pointer flex items-center space-x-1 ${
+                  activeTab === 'admin' ? 'bg-emerald-950 text-emerald-300 border border-emerald-500/30' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
+                }`}
+              >
+                <Cpu className="w-3.5 h-3.5 text-emerald-400" />
+                <span>{t('systemTelemetry', language)}</span>
+              </button>
+            </div>
+
+            {/* Jurisdiction Selector */}
+            <div className="relative flex items-center bg-slate-900 border border-slate-800 rounded-lg px-2 py-1">
+              <Globe className="w-3.5 h-3.5 text-emerald-400 mr-1" />
+              <select
+                value={jurisdiction}
+                onChange={(e) => setJurisdiction(e.target.value)}
+                className="bg-transparent text-slate-200 font-medium focus:outline-none cursor-pointer text-xs"
+              >
+                <option value="India" className="bg-slate-900 text-slate-200">{t('india', language)} ▾</option>
+                <option value="International" className="bg-slate-900 text-slate-200">{t('international', language)} ▾</option>
+                <option value="Both" className="bg-slate-900 text-slate-200">{t('both', language)} ▾</option>
+              </select>
+            </div>
+
+            {/* Language Selector */}
+            <div className="relative flex items-center bg-slate-900 border border-slate-800 rounded-lg px-2 py-1">
+              <select
+                value={language}
+                onChange={(e) => setLanguage(e.target.value)}
+                className="bg-transparent text-emerald-300 font-medium focus:outline-none cursor-pointer text-xs font-semibold"
+              >
+                {languages.map((l) => (
+                  <option key={l.code} value={l.code} className="bg-slate-900 text-slate-200">
+                    {l.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Help Button */}
+            <button
+              onClick={() => setShowHelpModal(true)}
+              className="flex items-center space-x-1 text-slate-400 hover:text-slate-200 px-2 py-1 rounded-lg transition cursor-pointer"
+              title="Help & Workflow Info"
             >
-              {languages.map((l) => (
-                <option key={l.code} value={l.code} className="bg-slate-900 text-slate-200">
-                  {l.label}
-                </option>
-              ))}
-            </select>
+              <HelpCircle className="w-4 h-4 text-emerald-400" />
+              <span className="hidden sm:inline font-medium">{t('help', language)}</span>
+            </button>
+
+            {/* Profile Avatar */}
+            <div className="w-7 h-7 rounded-full bg-emerald-950 border border-emerald-500/40 text-emerald-400 flex items-center justify-center font-bold text-xs shadow-inner">
+              ◯
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Main Navigation Tabs */}
-      <div className="max-w-7xl mx-auto px-4 overflow-x-auto scrollbar-none border-t border-slate-900">
-        <nav className="flex space-x-1 py-1.5">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = activeTab === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => setActiveTab(item.id)}
-                className={`flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
-                  isActive
-                    ? 'bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 shadow-sm'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/60'
-                }`}
-              >
-                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-emerald-400' : 'text-slate-500'}`} />
-                <span>{item.label}</span>
-              </button>
-            );
-          })}
-        </nav>
-      </div>
-    </header>
+        {/* 6-Stage Progress Stepper */}
+        <div className="max-w-7xl mx-auto px-4 py-2.5 overflow-x-auto scrollbar-none">
+          <div className="flex items-center justify-between min-w-[640px] space-x-2">
+            {primaryStages.map((stage, idx) => {
+              const state = getStageState(stage.id, idx);
+              const isCurrent = state === 'current';
+              const isCompleted = state === 'completed';
+              const isFuture = state === 'future';
+              const stageName = t(stage.labelKey, language);
+
+              return (
+                <React.Fragment key={stage.id}>
+                  <button
+                    onClick={() => setActiveTab(stage.id)}
+                    className={`flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs transition cursor-pointer font-medium border ${
+                      isCurrent
+                        ? 'bg-emerald-950/80 border-emerald-500/60 text-emerald-300 shadow-md font-semibold'
+                        : isCompleted
+                        ? 'bg-slate-900/80 border-emerald-900/40 text-emerald-400/90 hover:bg-slate-900'
+                        : 'bg-slate-950 border-slate-900 text-slate-500 hover:text-slate-400 hover:bg-slate-900/40'
+                    }`}
+                  >
+                    <span
+                      className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
+                        isCurrent
+                          ? 'bg-emerald-500 text-slate-950'
+                          : isCompleted
+                          ? 'bg-emerald-950 text-emerald-400 border border-emerald-500/40'
+                          : 'bg-slate-900 text-slate-600 border border-slate-800'
+                      }`}
+                    >
+                      {isCompleted ? <Check className="w-3 h-3 stroke-[3]" /> : stage.num}
+                    </span>
+
+                    <span>
+                      {isCompleted && '✓ '}
+                      {isCurrent && `${stage.num} `}
+                      {isFuture && '○ '}
+                      {stageName}
+                    </span>
+                  </button>
+
+                  {idx < primaryStages.length - 1 && (
+                    <div
+                      className={`flex-1 h-[1.5px] max-w-[28px] mx-1 rounded-full ${
+                        idx < currentIndex
+                          ? 'bg-emerald-500/50'
+                          : 'bg-slate-800'
+                      }`}
+                    />
+                  )}
+                </React.Fragment>
+              );
+            })}
+          </div>
+        </div>
+      </header>
+
+      {/* Quick Help Modal */}
+      {showHelpModal && (
+        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 relative">
+            <button
+              onClick={() => setShowHelpModal(false)}
+              className="absolute top-4 right-4 text-slate-400 hover:text-white"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="flex items-center space-x-3">
+              <div className="p-2 rounded-xl bg-emerald-950 border border-emerald-500/40 text-emerald-400">
+                <HelpCircle className="w-5 h-5" />
+              </div>
+              <h3 className="text-base font-bold text-slate-100">{t('appTitle', language)} Workflow Guide</h3>
+            </div>
+
+            <div className="space-y-2 text-xs">
+              <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800">
+                <span className="font-bold text-emerald-400">1. {t('stage1', language)}:</span> Define formulation name, ingredients, intended use.
+              </div>
+              <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800">
+                <span className="font-bold text-emerald-400">2. {t('stage2', language)}:</span> Get product classification & formulation fingerprint.
+              </div>
+              <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800">
+                <span className="font-bold text-emerald-400">3. {t('stage3', language)}:</span> Review TKDL, Prior Art, & IPR conflicts.
+              </div>
+              <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800">
+                <span className="font-bold text-emerald-400">4. {t('stage4', language)}:</span> Discover regulatory pathway & compliance checklist.
+              </div>
+              <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800">
+                <span className="font-bold text-emerald-400">5. {t('stage5', language)}:</span> Inspect evidence integrity & missing gaps.
+              </div>
+              <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800">
+                <span className="font-bold text-emerald-400">6. {t('stage6', language)}:</span> Export official research dossier (PDF/MD/JSON).
+              </div>
+            </div>
+
+            <button
+              onClick={() => setShowHelpModal(false)}
+              className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs py-2.5 rounded-xl transition cursor-pointer"
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
+    </>
   );
 };

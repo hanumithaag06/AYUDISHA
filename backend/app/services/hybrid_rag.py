@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from backend.app.core.config import settings
 from backend.app.models.models import DocumentChunk, SourceDocument, Source, DocumentVersion, RetrievalLog
 from backend.app.services.terminology import normalizer
+from backend.app.services.translation import multilingual_service
 from backend.app.schemas.schemas import ChatRequest, ChatResponse, CitationSchema, ClaimVerification
 
 class HybridRAGEngine:
@@ -34,13 +35,8 @@ class HybridRAGEngine:
         return "GENERAL_REGULATORY_QUERY"
 
     def detect_language(self, query: str) -> str:
-        # Check Indian language characters or transliterations
-        q_lower = query.lower()
-        if any(w in q_lower for w in ["vanakkam", "nanri", "ayurvedam", "marunthu"]):
-            return "ta"
-        elif any(w in q_lower for w in ["kya", "kaise", "samhita", "adhiniyam", "dava"]):
-            return "hi"
-        return "en"
+        """Dynamic script-range based language detection. No hardcoded word checks."""
+        return multilingual_service.detect_language_from_script(query)
 
     async def retrieve_chunks(
         self,
@@ -96,7 +92,12 @@ class HybridRAGEngine:
     ) -> ChatResponse:
         trail_id = f"trail-{uuid.uuid4().hex[:8]}"
         intent = self.detect_intent(request.query)
-        detected_lang = self.detect_language(request.query)
+        
+        # Determine language dynamically from request or query script
+        target_lang = (request.language if request.language and request.language != "en" 
+                       else self.detect_language(request.query))
+        
+        tmpl = multilingual_service.get_template(target_lang)
 
         # Retrieve grounding chunks from database
         chunks = await self.retrieve_chunks(
@@ -125,42 +126,37 @@ class HybridRAGEngine:
 
         # Hallucination Guard & Confidence Evaluation
         if not citations:
-            confidence = "Insufficient evidence"
+            confidence = tmpl.get("no_evidence", "Insufficient evidence")
             confidence_score = 0.2
-            answer = (
-                "AYUDISHA Hallucination Guard: Insufficient authoritative evidence was retrieved from the database "
-                "for your specific query. AYUDISHA does not generate unverified claims. Please refine your query or "
-                "check official legal portals."
-            )
+            answer = tmpl.get("insufficient", "Insufficient authoritative evidence retrieved.")
             claims = [
                 ClaimVerification(
                     claim_id="clm-1",
-                    claim_text="No supporting statutory chunks found.",
+                    claim_text=tmpl.get("unsupported_claim", "No supporting statutory chunks found."),
                     verification_status="UNSUPPORTED",
                     supporting_citation_id=None
                 )
             ]
         else:
-            confidence = "High evidence support" if len(citations) >= 3 else "Moderate evidence support"
+            confidence = tmpl.get("high_confidence", "High evidence support") if len(citations) >= 3 else tmpl.get("mod_confidence", "Moderate evidence support")
             confidence_score = min(0.95, 0.6 + 0.1 * len(citations))
 
-            # Build grounded answer text synthesis strictly citing evidence
-            evidence_summary = "\n".join([f"[{c.id}] ({c.document_title}, {c.section}): {c.evidence_text}" for c in citations])
-
-            answer_parts = [
-                f"Based on retrieved authoritative sources ({len(citations)} evidence chunks verified):",
-                ""
-            ]
+            intro_header = tmpl.get("intro", "Based on retrieved authoritative sources ({count} evidence chunks verified):").format(count=len(citations))
+            answer_parts = [intro_header, ""]
 
             claims = []
             for idx, c in enumerate(citations, 1):
                 part = f"• **{c.document_title} ({c.section})**: {c.evidence_text} [Source: {c.source_name}]"
                 answer_parts.append(part)
 
+                claim_txt = tmpl.get("statutory_mandate", "Statutory mandate per {section} of {title}").format(
+                    section=c.section,
+                    title=c.document_title
+                )
                 claims.append(
                     ClaimVerification(
                         claim_id=f"clm-{idx}",
-                        claim_text=f"Statutory mandate per {c.section} of {c.document_title}",
+                        claim_text=claim_txt,
                         verification_status="VERIFIED",
                         supporting_citation_id=c.id
                     )
@@ -175,18 +171,18 @@ class HybridRAGEngine:
             detected_intent=intent,
             detected_jurisdiction=request.jurisdiction,
             confidence_score=confidence_score,
-            unsupported_claims_flag=(confidence == "Insufficient evidence")
+            unsupported_claims_flag=(len(citations) == 0)
         )
         db.add(log_entry)
         await db.commit()
 
-        # Build Next Suggested Questions
-        next_questions = [
+        # Build Next Suggested Questions dynamically
+        next_questions = tmpl.get("next_questions", [
             "What documents are required for NBA Form I approval?",
-            "How does Section 3(p) TKDL defense compare with Section 3(e) synergistic efficacy proof?",
-            "What are the packaging and logo rules under FSSAI Ayurveda-Aahar 2022?",
-            "What are the US FDA Botanical Drug development requirements vs EU THMPD?"
-        ]
+            "How does Section 3(p) TKDL defense compare with Section 3(e) synergistic efficacy proof?"
+        ])
+
+        disclaimer_text = tmpl.get("disclaimer", settings.LEGAL_DISCLAIMER)
 
         return ChatResponse(
             answer=answer,
@@ -200,7 +196,7 @@ class HybridRAGEngine:
                 for c in citations
             ],
             next_questions=next_questions,
-            disclaimer=settings.LEGAL_DISCLAIMER,
+            disclaimer=disclaimer_text,
             research_trail_id=trail_id
         )
 

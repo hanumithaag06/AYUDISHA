@@ -3,11 +3,12 @@ import { Send, Sparkles, BookOpen, Shield, ExternalLink, HelpCircle, CheckCircle
 import { ResearchTrailModal } from './ResearchTrailModal';
 
 interface ResearchChatProps {
-  jurisdiction: string;
-  language: string;
+  jurisdiction?: string;
+  language?: string;
+  researchData?: any;
 }
 
-export const ResearchChat: React.FC<ResearchChatProps> = ({ jurisdiction, language }) => {
+export const ResearchChat: React.FC<ResearchChatProps> = ({ jurisdiction = 'India', language = 'en', researchData }) => {
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState<any>(null);
